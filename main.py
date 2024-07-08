@@ -26,7 +26,7 @@ def main(iterations):
 
     # Simulação
     Simulation().simulate(iterations=iterations,
-                          vel_lattice_x=lattice.vel_lattice_x, vel_lattice_y=lattice.vel_lattice_y,
+                          vel_lattice_x=lattice.dir_lattice_x, vel_lattice_y=lattice.dir_lattice_y,
                           velocity_array=lattice.velocity_array, qtd_direcoes=lattice.qtd_direcoes,
                           weights=lattice.weights, tau=lattice.tau, solid_body=solid_body)
 

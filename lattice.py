@@ -12,9 +12,9 @@ class Lattice:
         self.num_lattice_y = 100  # Número de lattices em y
         self.tau = 0.56  # Taxa de Colisão
         self.qtd_direcoes = 9  # Quantidade de direções
-        self.vel_lattice_x = np.array([0, 0, 1, 1, 1, 0, -1, -1, -1])
-        self.vel_lattice_y = np.array([0, 1, 1, 0, -1, -1, -1, 0, 1])
-        self.weights = np.array([4/9, 1/9, 1/36, 1/9, 1/36, 1/9, 1/36, 1/9, 1/36])  # Distribuição das probabilidades de ir para um lado ou pro outro
+        self.dir_lattice_x = np.array([0, 0, 1, 1, 1, 0, -1, -1, -1])  # ficar no lugar, pra cima, e em sentido horário
+        self.dir_lattice_y = np.array([0, 1, 1, 0, -1, -1, -1, 0, 1])
+        self.weights = np.array([4/9, 1/9, 1/36, 1/9, 1/36, 1/9, 1/36, 1/9, 1/36])  # Distribuição das probabilidades de ir para um lado ou pro outro, 0.44, 0.11, 0.027, 0.11, 0.027, 0.11, 0.027, 0.11, 0.027
         self.velocity_array = None
 
     def seta_velocidades_iniciais(self):
