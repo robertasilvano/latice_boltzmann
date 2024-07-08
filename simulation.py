@@ -24,26 +24,26 @@ class Simulation:
 
     @classmethod
     def calculate_colision(cls, f_in, vel_x, vel_y, weights, num_lattices, rho,
-                           momentum_x, momentun_y, omega):
+                           velocity_x, velocity_y, omega):
         '''
         Calcula a colisão, retornando a nova matriz de velocidade
         '''
         # Estado de equilibrio do vetor de velocidades
         f_in_eq = np.zeros(f_in.shape)
         for i, vx, vy, weight in zip(range(num_lattices), vel_x, vel_y, weights):
-            f_in_eq[:, :, i] = rho * weight * (1 + 3 * (vx*momentum_x + vy*momentun_y) + 9 * (vx*momentum_x + vy*momentun_y)**2/2 - 3 * (momentum_x**2 + momentun_y**2)/2)
+            f_in_eq[:, :, i] = rho * weight * (1 + 3 * (vx * velocity_x + vy * velocity_y) + 9 * (vx * velocity_x + vy * velocity_y) ** 2 / 2 - 3 * (velocity_x ** 2 + velocity_y ** 2) / 2)
         f_out = f_in + - omega * (f_in - f_in_eq)
 
         return f_out
 
     @classmethod
-    def plot_simulation(cls, iteration, momentum_x, momentum_y):
+    def plot_simulation(cls, iteration, velocity_x, velocity_y):
         '''
         Plota a simulação
-        Se o número da iteração for multiplo de plot_rate, mostra a imagem da magnitude do vetor de momento
+        Se o número da iteração for multiplo de plot_rate, mostra a imagem da magnitude do vetor de velocidade
         '''
         if iteration % plot_rate == 0:
-            pyplot.imshow(np.sqrt(momentum_x**2 + momentum_y**2))
+            pyplot.imshow(np.sqrt(velocity_x ** 2 + velocity_y ** 2))
             pyplot.pause(0.01)
             pyplot.cla()
 
@@ -54,8 +54,8 @@ class Simulation:
         Para cada iteração executa os seguintes passos:
             - desloca os valores de velocidade em cada direção do lattice
             - ajusta as células que estão na borda do corpo solido
-            - calcula a densidade e momento do fluido
-            - zera a velcoidade e o momento dentro do corpo sólido
+            - calcula a densidade e velocidade do fluido
+            - zera a velocidade e velocidade dentro do corpo sólido
             - calcula a colisão
             - plota
         '''
@@ -73,7 +73,7 @@ class Simulation:
             sd_boundry = f_in[solid_body, :]
             sd_boundry = sd_boundry[:, [0, 5, 6, 7, 8, 1, 2, 3, 4]]  # números das células opostas. invertendo direção das particulas que colidiram.
 
-            # Calculando variáveis do fluido (densidade e momento)
+            # Calculando variáveis do fluido (densidade e velocidade)
             rho = cls.calc_density(f_in)
             velocity_x, velocity_y = cls.calc_velocidade(f_in, vel_lattice_x, vel_lattice_y, rho)
 
