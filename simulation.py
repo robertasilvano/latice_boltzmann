@@ -23,15 +23,20 @@ class Simulation:
         return velocity_x, velocity_y
 
     @classmethod
-    def calculate_colision(cls, f_in, dir_x, dir_y, weights, num_lattices, rho,
-                           velocity_x, velocity_y, omega):
+    def calculate_eq(cls, f_in, dir_x, dir_y, weights, qtd_direcoes, rho, velocity_x, velocity_y):
+        '''
+        Define a função de distribuição de equilibrio, por expansão de série de taylor
+        '''
+        f_in_eq = np.zeros(f_in.shape)
+        for i, vx, vy, weight in zip(range(qtd_direcoes), dir_x, dir_y, weights):
+            f_in_eq[:, :, i] = rho * weight * (1 + 3 * (vx * velocity_x + vy * velocity_y) + 9 * (vx * velocity_x + vy * velocity_y) ** 2 / 2 - 3 * (velocity_x ** 2 + velocity_y ** 2) / 2)
+        return f_in_eq
+
+    @classmethod
+    def calculate_colision(cls, f_in, f_in_eq, omega):
         '''
         Calcula a colisão, retornando a nova matriz de velocidade
         '''
-        # Estado de equilibrio do vetor de velocidades
-        f_in_eq = np.zeros(f_in.shape)
-        for i, vx, vy, weight in zip(range(num_lattices), dir_x, dir_y, weights):
-            f_in_eq[:, :, i] = rho * weight * (1 + 3 * (vx * velocity_x + vy * velocity_y) + 9 * (vx * velocity_x + vy * velocity_y) ** 2 / 2 - 3 * (velocity_x ** 2 + velocity_y ** 2) / 2)
         f_out = f_in + - omega * (f_in - f_in_eq)
 
         return f_out
@@ -82,7 +87,8 @@ class Simulation:
             velocity_x[solid_body] = 0
             velocity_y[solid_body] = 0
 
-            f_in = cls.calculate_colision(f_in, dir_lattice_x, dir_lattice_y, weights, qtd_direcoes,
-                                          rho, velocity_x, velocity_y, omega)
+            f_in_eq = cls.calculate_eq(f_in, dir_lattice_x, dir_lattice_y, weights, qtd_direcoes, rho, velocity_x, velocity_y,)
+
+            f_in = cls.calculate_colision(f_in, f_in_eq, omega)
 
             cls.plot_simulation(iteration, velocity_x, velocity_y)
