@@ -8,7 +8,7 @@ class Simulation:
     @classmethod
     def calc_density(cls, f_in):
         '''
-        Calcula a densidade do fluido em cada célula da grade, somando as componentes de velocidade ao longo da direção 2
+        Calcula a densidade do fluido em cada célula da grade, somando as componentes de velocidade ao longo no axis 2 (velocidades)
         '''
         return np.sum(f_in, 2)
 
@@ -38,7 +38,7 @@ class Simulation:
         '''
         Calcula a colisão, retornando a nova matriz de velocidade
         '''
-        f_out = f_in + - omega * (f_in - f_in_eq)
+        f_out = f_in - omega * (f_in - f_in_eq)
 
         return f_out
 
@@ -70,8 +70,11 @@ class Simulation:
         for iteration in range(iterations):
             print(f'Iteration {iteration} out of {iterations}')
 
-            # Retirando a parede da direita
+            # Ajustando a parede da direita
             f_in[:, -1, [6, 7, 8]] = f_in[:, -2, [6, 7, 8]]  # linha (y), coluna (x), direção
+
+            # Ajustando a parede da esquerda
+            f_in[:, 0, [2, 3, 4]] = f_in[:, 1, [2, 3, 4]]  # linha (y), coluna (x), direção
 
             # Alterando o valor de velocidade de cada célula dos n Lattices, shiftando os valores de velocidade
             for direcao, dir_x, dir_y in zip(range(qtd_direcoes), dir_lattice_x, dir_lattice_y):

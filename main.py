@@ -9,7 +9,7 @@ from simulation import Simulation
 
 ITERATIONS = 10000
 RADIUS = 13
-SOLID_X_POS = 50
+SOLID_X_POS = 100
 SOLID_Y_POS = 50
 SOLID_BODY = 'P'
 
