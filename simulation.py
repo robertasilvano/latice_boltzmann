@@ -32,7 +32,7 @@ class Simulation:
         velocity_array_eq = np.zeros(velocity_array.shape)
         for i, vx, vy, weight in zip(range(num_lattices), vel_x, vel_y, weights):
             velocity_array_eq[:, :, i] = rho * weight * (1 + 3 * (vx*momentum_x + vy*momentun_y) + 9 * (vx*momentum_x + vy*momentun_y)**2/2 - 3 * (momentum_x**2 + momentun_y**2)/2)
-        new_velocity_array = velocity_array + -(1/tau) * (velocity_array - velocity_array_eq)
+        new_velocity_array = velocity_array + - omega * (velocity_array - velocity_array_eq)
 
         return new_velocity_array
 
@@ -48,7 +48,7 @@ class Simulation:
             pyplot.cla()
 
     @classmethod
-    def simulate(cls, iterations, vel_lattice_x, vel_lattice_y, velocity_array, qtd_direcoes, weights, tau, solid_body):
+    def simulate(cls, iterations, vel_lattice_x, vel_lattice_y, velocity_array, qtd_direcoes, weights, omega, solid_body):
         '''
         Executa a simulação pelo método de lattice boltzmann.
         Para cada iteração executa os seguintes passos:
@@ -71,18 +71,18 @@ class Simulation:
 
             # Checando pontos de colisão com o corpo sólido para alterar a direção da velocidade
             sd_boundry = velocity_array[solid_body, :]
-            sd_boundry = sd_boundry[:, [0, 5, 6, 7, 8, 1, 2, 3, 4]]  # números das células opostas
+            sd_boundry = sd_boundry[:, [0, 5, 6, 7, 8, 1, 2, 3, 4]]  # números das células opostas. invertendo direção das particulas que colidiram.
 
             # Calculando variáveis do fluido (densidade e momento)
             rho = cls.calc_density(velocity_array)
-            momentum_x, momentum_y = cls.calc_momentum(velocity_array, vel_lattice_x, vel_lattice_y, rho)
+            velocity_x, velocity_y = cls.calc_velocidade(velocity_array, vel_lattice_x, vel_lattice_y, rho)
 
             # Zerando velocidade do fluido no interior do corpo sólido
             velocity_array[solid_body, :] = sd_boundry
-            momentum_x[solid_body] = 0
-            momentum_y[solid_body] = 0
+            velocity_x[solid_body] = 0
+            velocity_y[solid_body] = 0
 
             velocity_array = cls.calculate_colision(velocity_array, vel_lattice_x, vel_lattice_y, weights, qtd_direcoes,
-                                                    rho, momentum_x, momentum_y, tau)
+                                                    rho, velocity_x, velocity_y, omega)
 
-            cls.plot_simulation(iteration, momentum_x, momentum_y)
+            cls.plot_simulation(iteration, velocity_x, velocity_y)
