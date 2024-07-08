@@ -13,24 +13,24 @@ class Simulation:
         return np.sum(f_in, 2)
 
     @classmethod
-    def calc_velocidade(cls, f_in, vel_x, vel_y, rho):
+    def calc_velocidade(cls, f_in, dir_x, dir_y, rho):
         '''
         Calcula a velocidade do fluido em cada direção
         '''
-        velocity_x = np.sum(f_in * vel_x, 2) / rho
-        velocity_y = np.sum(f_in * vel_y, 2) / rho
+        velocity_x = np.sum(f_in * dir_x, 2) / rho
+        velocity_y = np.sum(f_in * dir_y, 2) / rho
 
         return velocity_x, velocity_y
 
     @classmethod
-    def calculate_colision(cls, f_in, vel_x, vel_y, weights, num_lattices, rho,
+    def calculate_colision(cls, f_in, dir_x, dir_y, weights, num_lattices, rho,
                            velocity_x, velocity_y, omega):
         '''
         Calcula a colisão, retornando a nova matriz de velocidade
         '''
         # Estado de equilibrio do vetor de velocidades
         f_in_eq = np.zeros(f_in.shape)
-        for i, vx, vy, weight in zip(range(num_lattices), vel_x, vel_y, weights):
+        for i, vx, vy, weight in zip(range(num_lattices), dir_x, dir_y, weights):
             f_in_eq[:, :, i] = rho * weight * (1 + 3 * (vx * velocity_x + vy * velocity_y) + 9 * (vx * velocity_x + vy * velocity_y) ** 2 / 2 - 3 * (velocity_x ** 2 + velocity_y ** 2) / 2)
         f_out = f_in + - omega * (f_in - f_in_eq)
 
@@ -48,7 +48,7 @@ class Simulation:
             pyplot.cla()
 
     @classmethod
-    def simulate(cls, iterations, vel_lattice_x, vel_lattice_y, f_in, qtd_direcoes, weights, omega, solid_body):
+    def simulate(cls, iterations, dir_lattice_x, dir_lattice_y, f_in, qtd_direcoes, weights, omega, solid_body):
         '''
         Executa a simulação pelo método de lattice boltzmann.
         Para cada iteração executa os seguintes passos:
@@ -65,9 +65,9 @@ class Simulation:
             print(f'Iteration {iteration} out of {iterations}')
 
             # Alterando o valor de velocidade de cada célula dos n Lattices, shiftando os valores de velocidade
-            for direcao, vx, vy in zip(range(qtd_direcoes), vel_lattice_x, vel_lattice_y):
-                f_in[:, :, direcao] = np.roll(f_in[:, :, direcao], vx, axis=1)
-                f_in[:, :, direcao] = np.roll(f_in[:, :, direcao], vy, axis=0)
+            for direcao, dir_x, dir_y in zip(range(qtd_direcoes), dir_lattice_x, dir_lattice_y):
+                f_in[:, :, direcao] = np.roll(f_in[:, :, direcao], dir_x, axis=1)
+                f_in[:, :, direcao] = np.roll(f_in[:, :, direcao], dir_y, axis=0)
 
             # Checando pontos de colisão com o corpo sólido para alterar a direção da velocidade
             sd_boundry = f_in[solid_body, :]
@@ -75,14 +75,14 @@ class Simulation:
 
             # Calculando variáveis do fluido (densidade e velocidade)
             rho = cls.calc_density(f_in)
-            velocity_x, velocity_y = cls.calc_velocidade(f_in, vel_lattice_x, vel_lattice_y, rho)
+            velocity_x, velocity_y = cls.calc_velocidade(f_in, dir_lattice_x, dir_lattice_y, rho)
 
             # Zerando velocidade do fluido no interior do corpo sólido
             f_in[solid_body, :] = sd_boundry
             velocity_x[solid_body] = 0
             velocity_y[solid_body] = 0
 
-            f_in = cls.calculate_colision(f_in, vel_lattice_x, vel_lattice_y, weights, qtd_direcoes,
+            f_in = cls.calculate_colision(f_in, dir_lattice_x, dir_lattice_y, weights, qtd_direcoes,
                                           rho, velocity_x, velocity_y, omega)
 
             cls.plot_simulation(iteration, velocity_x, velocity_y)
