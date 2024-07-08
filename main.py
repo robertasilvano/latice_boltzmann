@@ -30,7 +30,8 @@ def main(iterations):
     Simulation().simulate(iterations=iterations,
                           dir_lattice_x=lattice.dir_lattice_x, dir_lattice_y=lattice.dir_lattice_y,
                           f_in=lattice.f_in, qtd_direcoes=lattice.qtd_direcoes,
-                          weights=lattice.weights, omega=lattice.omega, solid_body=solid_body)
+                          weights=lattice.weights, omega=lattice.omega, solid_body=solid_body,
+                          initial_vel=lattice.initial_vel)
 
 
 if __name__ == '__main__':
