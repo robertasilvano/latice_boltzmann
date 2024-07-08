@@ -11,6 +11,7 @@ ITERATIONS = 10000
 RADIUS = 13
 SOLID_X_POS = 50
 SOLID_Y_POS = 50
+SOLID_BODY = 'P'
 
 
 def main(iterations):
@@ -22,7 +23,8 @@ def main(iterations):
 
     # Perfil do Sólido
     solid_body = SolidBody().monta_solid_body(num_lattice_x=lattice.num_lattice_x, num_lattice_y=lattice.num_lattice_y,
-                                              radius=RADIUS, solid_x_pos=SOLID_X_POS, solid_y_pos=SOLID_Y_POS)
+                                              radius=RADIUS, solid_x_pos=SOLID_X_POS, solid_y_pos=SOLID_Y_POS,
+                                              SOLID_BODY=SOLID_BODY)
 
     # Simulação
     Simulation().simulate(iterations=iterations,
