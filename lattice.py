@@ -13,8 +13,8 @@ class Lattice:
         self.tau = 0.56  # Taxa de Colisão (relaxation time)
         self.omega = 1/self.tau  # Parametro de relaxamento
         self.qtd_direcoes = 9  # Quantidade de direções
-        self.dir_lattice_x = np.array([0, 0, 1, 1, 1, 0, -1, -1, -1])  # ficar no lugar, pra cima, e em sentido horário
-        self.dir_lattice_y = np.array([0, 1, 1, 0, -1, -1, -1, 0, 1])
+        self.dir_lattice_x = np.array([0, 0, 1, 1,  1,  0, -1, -1, -1])  # ficar no lugar, pra cima, e em sentido horário
+        self.dir_lattice_y = np.array([0, 1, 1, 0, -1, -1, -1,  0, 1])
         self.weights = np.array([4/9, 1/9, 1/36, 1/9, 1/36, 1/9, 1/36, 1/9, 1/36])  # Distribuição das probabilidades de ir para um lado ou pro outro, onde a probabilidade é menor pra onde é mais fácil se mover. 0.44, 0.11, 0.027, 0.11, 0.027, 0.11, 0.027, 0.11, 0.027
         self.f_in = None
 

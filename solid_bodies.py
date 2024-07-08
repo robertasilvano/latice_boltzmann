@@ -45,6 +45,6 @@ class SolidBody:
         for celula_y in range(0, num_lattice_y):
             for celula_x in range(0, num_lattice_x):
                 if celula_x == solid_x_pos:
-                    if solid_y_pos - 5 <= celula_y <= solid_y_pos + 5:
+                    if solid_y_pos - 10 <= celula_y <= solid_y_pos + 10:
                         solid_body[celula_y][celula_x] = True
         return solid_body

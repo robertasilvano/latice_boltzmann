@@ -70,6 +70,9 @@ class Simulation:
         for iteration in range(iterations):
             print(f'Iteration {iteration} out of {iterations}')
 
+            # Retirando a parede da direita
+            f_in[:, -1, [6, 7, 8]] = f_in[:, -2, [6, 7, 8]]  # linha (y), coluna (x), direção
+
             # Alterando o valor de velocidade de cada célula dos n Lattices, shiftando os valores de velocidade
             for direcao, dir_x, dir_y in zip(range(qtd_direcoes), dir_lattice_x, dir_lattice_y):
                 f_in[:, :, direcao] = np.roll(f_in[:, :, direcao], dir_x, axis=1)
