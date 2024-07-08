@@ -28,8 +28,9 @@ class Simulation:
         Define a função de distribuição de equilibrio, por expansão de série de taylor
         '''
         f_in_eq = np.zeros(f_in.shape)
-        for i, vx, vy, weight in zip(range(qtd_direcoes), dir_x, dir_y, weights):
-            f_in_eq[:, :, i] = rho * weight * (1 + 3 * (vx * velocity_x + vy * velocity_y) + 9 * (vx * velocity_x + vy * velocity_y) ** 2 / 2 - 3 * (velocity_x ** 2 + velocity_y ** 2) / 2)
+        for direcao, dir_x, dir_y, weight in zip(range(qtd_direcoes), dir_x, dir_y, weights):
+            c = (dir_x * velocity_x + dir_y * velocity_y)
+            f_in_eq[:, :, direcao] = rho * weight * (1 + 3 * c + 9 * c ** 2 / 2 - 3 * (velocity_x ** 2 + velocity_y ** 2) / 2)
         return f_in_eq
 
     @classmethod
