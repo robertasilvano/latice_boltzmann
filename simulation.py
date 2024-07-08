@@ -13,18 +13,18 @@ class Simulation:
         return np.sum(velocity_array, 2)
 
     @classmethod
-    def calc_momentum(cls, velocity_array, vel_x, vel_y, rho):
+    def calc_velocidade(cls, velocity_array, vel_x, vel_y, rho):
         '''
-        Calcula o momento do fluido em cada direção
+        Calcula a velocidade do fluido em cada direção
         '''
-        momentum_x = np.sum(velocity_array*vel_x, 2)/rho
-        momentum_y = np.sum(velocity_array*vel_y, 2)/rho
+        velocity_x = np.sum(velocity_array*vel_x, 2)/rho
+        velocity_y = np.sum(velocity_array*vel_y, 2)/rho
 
-        return momentum_x, momentum_y
+        return velocity_x, velocity_y
 
     @classmethod
     def calculate_colision(cls, velocity_array, vel_x, vel_y, weights, num_lattices, rho,
-                           momentum_x, momentun_y, tau):
+                           momentum_x, momentun_y, omega):
         '''
         Calcula a colisão, retornando a nova matriz de velocidade
         '''
